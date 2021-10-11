@@ -1,5 +1,6 @@
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
+import { Exclude } from 'class-transformer';
 
 @Entity('user')
 export class UserEntity {
@@ -13,6 +14,7 @@ export class UserEntity {
   })
   username: string;
 
+  @Exclude()
   @Column({
     type: 'varchar',
     nullable: false,
