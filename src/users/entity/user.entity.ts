@@ -1,12 +1,14 @@
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Exclude } from 'class-transformer';
+import { AutoMap } from '@automapper/classes';
 
 @Entity('user')
 export class UserEntity {
+  @AutoMap()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @AutoMap()
   @Column({
     type: 'varchar',
     nullable: false,
@@ -14,13 +16,13 @@ export class UserEntity {
   })
   username: string;
 
-  @Exclude()
   @Column({
     type: 'varchar',
     nullable: false,
   })
   password: string;
 
+  @AutoMap()
   @Column({
     type: 'varchar',
     nullable: false,

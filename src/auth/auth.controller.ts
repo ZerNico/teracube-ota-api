@@ -6,17 +6,22 @@ import {
   Get,
   Body,
   UseInterceptors,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
-import { CreateUserDto } from '../users/dto/create.user.dto';
-import { UserDto } from '../users/dto/user.dto';
+import { CreateUserDto } from '@users/dto/create.user.dto';
+import { UserDto } from '@users/dto/user.dto';
+import { InjectMapper, MapInterceptor } from '@automapper/nestjs';
+import { UserEntity } from '@users/entity/user.entity';
+import { Mapper } from '@automapper/types';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    @InjectMapper() private mapper: Mapper,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -24,10 +29,10 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(MapInterceptor(UserDto, UserEntity))
   @Post('register')
-  async register(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
-    return await this.authService.register(createUserDto);
+  async register(@Body() createUserDto: CreateUserDto) {
+    return this.authService.register(createUserDto);
   }
 
   @UseGuards(JwtAuthGuard)

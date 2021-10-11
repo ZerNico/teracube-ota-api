@@ -7,12 +7,15 @@ import { LocalStrategy } from './strategy/local.strategy';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserMapper } from '@users/profile/user.mapper-profile';
+import { AutomapperModule } from '@automapper/nestjs';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
     ConfigModule,
+    AutomapperModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -22,7 +25,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, UserMapper],
   exports: [AuthService],
   controllers: [AuthController],
 })

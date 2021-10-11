@@ -1,6 +1,10 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@automapper/classes': ^6.2.1
+  '@automapper/core': ^6.2.1
+  '@automapper/nestjs': ^6.2.1
+  '@automapper/types': ^6.2.1
   '@nestjs/cli': ^8.0.0
   '@nestjs/common': ^8.0.0
   '@nestjs/config': ^1.0.2
@@ -46,6 +50,9 @@ specifiers:
   typescript: ^4.3.5
 
 dependencies:
+  '@automapper/classes': 6.2.1_4bb65ec57233afe3cfac89733bac292d
+  '@automapper/core': 6.2.1_@automapper+types@6.2.1
+  '@automapper/nestjs': 6.2.1_2d95083abfd33ce089ec4a41f75a3b95
   '@nestjs/common': 8.0.11_43f93dd897e68fe834a23ddd32fb54cc
   '@nestjs/config': 1.0.2_591b56c4852c5782f3284e539347cdb9
   '@nestjs/core': 8.0.11_fbed3fa0c229df251b831620a2821997
@@ -67,6 +74,7 @@ dependencies:
   typeorm: 0.2.38_pg@8.7.1
 
 devDependencies:
+  '@automapper/types': 6.2.1
   '@nestjs/cli': 8.1.2
   '@nestjs/schematics': 8.0.3_typescript@4.4.3
   '@nestjs/testing': 8.0.11_7e2e4b0562f8776b6a3eda332a83dca8
@@ -147,6 +155,48 @@ packages:
       '@angular-devkit/core': 12.2.7
       ora: 5.4.1
       rxjs: 6.6.7
+    dev: true
+
+  /@automapper/classes/6.2.1_4bb65ec57233afe3cfac89733bac292d:
+    resolution: {integrity: sha512-jg+DnAGVvGWzyVMc05uaW6VgRIPsqO6QndOVGDqmEwWLfcEXCh3oXL6QgHfuEQQWkGyjhyaxUScvK2uHxKJASA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      '@automapper/core': 6.2.1
+      '@automapper/types': 6.2.1
+      reflect-metadata: ~0.1.13
+    dependencies:
+      '@automapper/core': 6.2.1_@automapper+types@6.2.1
+      '@automapper/types': 6.2.1
+      reflect-metadata: 0.1.13
+    dev: false
+
+  /@automapper/core/6.2.1_@automapper+types@6.2.1:
+    resolution: {integrity: sha512-vz51AubIafpD5DXrMB7AjMzx4qM9pmqMwolpFtR9glWSJCDHAsuuNNtyVfGU6WKmXtnWsZQyUeh9uIQBmjw8+g==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      '@automapper/types': 6.2.1
+    dependencies:
+      '@automapper/types': 6.2.1
+    dev: false
+
+  /@automapper/nestjs/6.2.1_2d95083abfd33ce089ec4a41f75a3b95:
+    resolution: {integrity: sha512-2JkRXWn9vn0LepjxtEOcaUr9ttYor6Uc7+xrrdQdIsvYRVIyppPfjte3yPk8R9/UVX9y7FcKy8dow1Lc1MSpdw==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      '@automapper/core': 6.2.1
+      '@automapper/types': 6.2.1
+      '@nestjs/common': ^7.0.0 || ^8.0.0
+      '@nestjs/core': ^7.0.0 || ^8.0.0
+    dependencies:
+      '@automapper/core': 6.2.1_@automapper+types@6.2.1
+      '@automapper/types': 6.2.1
+      '@nestjs/common': 8.0.11_43f93dd897e68fe834a23ddd32fb54cc
+      '@nestjs/core': 8.0.11_fbed3fa0c229df251b831620a2821997
+    dev: false
+
+  /@automapper/types/6.2.1:
+    resolution: {integrity: sha512-a/hSzV4ETeUJf7l3XJNlfv3TRNCD03Dvv2IpR0o7X9lEFox2mPV5PtbD7HsfJpTenMinueaOwKDnnM53RJeZuQ==}
+    engines: {node: '>=10.0.0'}
     dev: true
 
   /@babel/code-frame/7.12.11:

@@ -31,7 +31,7 @@ export class UsersService {
     return this.users.find((user) => user.username === username);
   }
 
-  async create(createUserDto: CreateUserDto): Promise<UserDto> {
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, password, email } = createUserDto;
 
     // check if the user exists in the db
@@ -42,7 +42,7 @@ export class UsersService {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
 
-    const user: UserEntity = await this.userRepo.create({
+    const user: UserEntity = this.userRepo.create({
       username,
       password,
       email,

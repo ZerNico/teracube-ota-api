@@ -7,9 +7,15 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import configuration from './config/configuration';
+import { AutomapperModule } from '@automapper/nestjs';
+import { classes } from '@automapper/classes';
 
 @Module({
   imports: [
+    AutomapperModule.forRoot({
+      options: [{ name: 'classes', pluginInitializer: classes }],
+      singular: true,
+    }),
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         PORT: Joi.number().default(3000),
