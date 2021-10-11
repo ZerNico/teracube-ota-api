@@ -1,6 +1,12 @@
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AutoMap } from '@automapper/classes';
+import { IsEnum } from 'class-validator';
+
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
 
 @Entity('user')
 export class UserEntity {
@@ -28,6 +34,15 @@ export class UserEntity {
     nullable: false,
   })
   email: string;
+
+  @AutoMap()
+  @IsEnum(UserRole)
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
 
   @BeforeInsert() async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);

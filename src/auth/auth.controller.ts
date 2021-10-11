@@ -13,8 +13,10 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { CreateUserDto } from '@users/dto/create.user.dto';
 import { UserDto } from '@users/dto/user.dto';
 import { InjectMapper, MapInterceptor } from '@automapper/nestjs';
-import { UserEntity } from '@users/entity/user.entity';
+import { UserEntity, UserRole } from '@users/entity/user.entity';
 import { Mapper } from '@automapper/types';
+import { Roles } from '@auth/decorator/roles.decorator';
+import { RolesGuard } from '@auth/guard/role.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -35,7 +37,8 @@ export class AuthController {
     return this.authService.register(createUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

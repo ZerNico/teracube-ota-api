@@ -20,7 +20,7 @@ import { AutomapperModule } from '@automapper/nestjs';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('jwt.secret'),
-        signOptions: { expiresIn: '60s' },
+        signOptions: { expiresIn: '60m' },
       }),
       inject: [ConfigService],
     }),
