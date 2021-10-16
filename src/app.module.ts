@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import configuration from './config/configuration';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
+import { UpdatesModule } from './updates/updates.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { classes } from '@automapper/classes';
     }),
     AuthModule,
     UsersModule,
+    UpdatesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
