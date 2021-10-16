@@ -1,18 +1,10 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseInterceptors, } from '@nestjs/common';
 import { UpdatesService } from './updates.service';
 import { CreateUpdateDto } from './dto/create.update.dto';
 import { MapInterceptor } from '@automapper/nestjs';
 import { UpdateEntity } from './entity/update.entity';
 import { UpdateDto } from './dto/update.dto';
+import { FindOneUpdateParams } from './params/fine-one.update.params';
 
 @Controller('updates')
 export class UpdatesController {
@@ -20,21 +12,22 @@ export class UpdatesController {
 
   @UseInterceptors(MapInterceptor(UpdateDto, UpdateEntity))
   @Post()
-  create(@Body() createUpdateDto: CreateUpdateDto) {
-    return this.updatesService.create(createUpdateDto);
+  async create(@Body() createUpdateDto: CreateUpdateDto): Promise<UpdateDto> {
+    return await this.updatesService.create(createUpdateDto);
   }
 
-  /*
+  @UseInterceptors(MapInterceptor(UpdateDto, UpdateEntity, { isArray: true }))
   @Get()
-  findAll() {
-    return this.updatesService.findAll();
+  async findAll(): Promise<UpdateDto[]> {
+    return await this.updatesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.updatesService.findOne(+id);
+  findOne(@Param() params: FindOneUpdateParams) {
+    return this.updatesService.findOne(params.id);
   }
 
+  /*
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUpdateDto: UpdateUpdateDto) {
     return this.updatesService.update(+id, updateUserDto);
