@@ -19,7 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@users/*": ["src/users/*"],
-      "@auth/*": ["src/auth/*"]
+      "@auth/*": ["src/auth/*"],
+      "@updates/*": ["src/updates/*"]
     },
   }
 }

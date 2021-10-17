@@ -10,7 +10,7 @@ import {
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
-import { CreateUserDto } from '@users/dto/create.user.dto';
+import { CreateUserDto } from '@users/dto/create-user.dto';
 import { UserDto } from '@users/dto/user.dto';
 import { InjectMapper, MapInterceptor } from '@automapper/nestjs';
 import { UserEntity, UserRole } from '@users/entity/user.entity';

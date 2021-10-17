@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UseInterceptors, } from '@nestjs/common';
 import { UpdatesService } from './updates.service';
-import { CreateUpdateDto } from './dto/create.update.dto';
+import { CreateUpdateDto } from './dto/create-update.dto';
 import { MapInterceptor } from '@automapper/nestjs';
 import { UpdateEntity } from './entity/update.entity';
-import { UpdateDto } from './dto/update.dto';
-import { FindOneUpdateParams } from './params/find-one.update.params';
-import { UpdateUpdateDto } from './dto/update.update.dto';
-import { UpdateUpdateParams } from './params/update.update.params';
-import { RemoveUpdateParams } from './params/remove.update.params';
+import { UpdateDto } from './dto/update-dto';
+import { FindOneUpdateParams } from './params/find-one-update.params';
+import { UpdateUpdateDto } from './dto/update-update.dto';
+import { UpdateUpdateParams } from './params/update-update.params';
+import { RemoveUpdateParams } from './params/remove-update.params';
 
 @Controller('updates')
 export class UpdatesController {

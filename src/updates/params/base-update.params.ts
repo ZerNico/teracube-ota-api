@@ -1,6 +1,6 @@
 import { IsUUID } from 'class-validator';
 
-export class FindOneUpdateParams {
+export class BaseUpdateParams {
   @IsUUID()
   id: string;
 }
