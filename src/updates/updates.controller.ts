@@ -27,6 +27,7 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { BadRequestResponse } from '../swagger/bad-request-response.dto';
@@ -58,6 +59,12 @@ export class UpdatesController {
     description: 'Returned updates',
     type: UpdateDto,
     isArray: true,
+  })
+  @ApiQuery({
+    name: 'timestamp__gt',
+    description: 'Updates with timestamp greater than',
+    example: 1613585773,
+    required: false,
   })
   async findAll(@Query() query): Promise<UpdateDto[]> {
     return await this.updatesService.findAll(query);
