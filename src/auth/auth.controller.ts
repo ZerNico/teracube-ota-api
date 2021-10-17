@@ -5,7 +5,7 @@ import {
   UseGuards,
   Get,
   Body,
-  UseInterceptors,
+  UseInterceptors, HttpCode, HttpStatus,
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthService } from './auth.service';
@@ -23,7 +23,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { ErrorResponseDto } from '../dto/error-response.dto';
+import { BadRequestResponse } from '../swagger/bad-request-response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -38,6 +38,7 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(MapInterceptor(UserDto, UserEntity))
   @Post('register')
   @ApiCreatedResponse({
@@ -46,7 +47,7 @@ export class AuthController {
   })
   @ApiBadRequestResponse({
     description: 'User already exists',
-    type: ErrorResponseDto,
+    type: BadRequestResponse,
   })
   async register(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
     return this.authService.register(createUserDto);
