@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { UpdatesService } from './updates.service';
@@ -22,7 +23,8 @@ import { RemoveUpdateParams } from './params/remove-update.params';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
-  ApiNoContentResponse, ApiNotFoundResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
   ApiTags,
@@ -57,8 +59,8 @@ export class UpdatesController {
     type: UpdateDto,
     isArray: true,
   })
-  async findAll(): Promise<UpdateDto[]> {
-    return await this.updatesService.findAll();
+  async findAll(@Query() query): Promise<UpdateDto[]> {
+    return await this.updatesService.findAll(query);
   }
 
   @UseInterceptors(MapInterceptor(UpdateDto, UpdateEntity))

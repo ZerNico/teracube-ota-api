@@ -4,6 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateEntity } from './entity/update.entity';
 import { UpdateUpdateDto } from './dto/update-update.dto';
+import { QueryBuilder } from 'typeorm-express-query-builder';
+import { ConfigProfile } from 'typeorm-express-query-builder/profile';
+import { buildsProfile } from '@updates/profile/query-builder.profile';
 
 @Injectable()
 export class UpdatesService {
@@ -18,8 +21,10 @@ export class UpdatesService {
     });
   }
 
-  async findAll(): Promise<UpdateEntity[]> {
-    return await this.updateRepo.find();
+  async findAll(query): Promise<UpdateEntity[]> {
+    const builder = new QueryBuilder(query, buildsProfile);
+    const builtQuery = builder.build();
+    return await this.updateRepo.find(builtQuery);
   }
 
   async findOne(id: string): Promise<UpdateEntity> {
