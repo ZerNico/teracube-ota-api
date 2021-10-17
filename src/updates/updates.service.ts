@@ -5,17 +5,19 @@ import { Repository } from 'typeorm';
 import { UpdateEntity } from './entity/update.entity';
 import { UpdateUpdateDto } from './dto/update-update.dto';
 import { QueryBuilder } from 'typeorm-express-query-builder';
-import { ConfigProfile } from 'typeorm-express-query-builder/profile';
 import { buildsProfile } from '@updates/profile/query-builder.profile';
+import { DevicesService } from '@devices/devices.service';
 
 @Injectable()
 export class UpdatesService {
   constructor(
+    private devicesService: DevicesService,
     @InjectRepository(UpdateEntity)
     private readonly updateRepo: Repository<UpdateEntity>,
   ) {}
 
   async create(createUpdateDto: CreateUpdateDto): Promise<UpdateEntity> {
+    await this.devicesService.findOne(createUpdateDto.codename);
     return await this.updateRepo.save({
       ...createUpdateDto,
     });

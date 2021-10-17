@@ -15,7 +15,7 @@ import { UpdatesService } from './updates.service';
 import { CreateUpdateDto } from './dto/create-update.dto';
 import { MapInterceptor } from '@automapper/nestjs';
 import { UpdateEntity } from './entity/update.entity';
-import { UpdateDto } from './dto/update-dto';
+import { UpdateDto } from './dto/update.dto';
 import { FindOneUpdateParams } from './params/find-one-update.params';
 import { UpdateUpdateDto } from './dto/update-update.dto';
 import { UpdateUpdateParams } from './params/update-update.params';
@@ -94,7 +94,7 @@ export class UpdatesController {
     description: 'Bad Request',
     type: NotFoundResponse,
   })
-  @ApiParam({ name: 'id', type: 'UUID' })
+  @ApiParam({ name: 'id', type: 'string' })
   update(
     @Param() params: UpdateUpdateParams,
     @Body() updateUpdateDto: UpdateUpdateDto,
@@ -111,7 +111,7 @@ export class UpdatesController {
   @ApiNoContentResponse({
     description: 'Update deleted',
   })
-  @ApiParam({ name: 'id', type: 'UUID' })
+  @ApiParam({ name: 'id', type: 'string' })
   remove(@Param() params: RemoveUpdateParams) {
     return this.updatesService.remove(params.id);
   }

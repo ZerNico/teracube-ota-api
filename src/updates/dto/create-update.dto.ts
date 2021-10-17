@@ -3,6 +3,11 @@ import { IsNumber, IsString, IsUrl } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUpdateDto {
+  @ApiProperty({ example: 'device1' })
+  @IsString()
+  @AutoMap()
+  codename: string;
+
   @ApiProperty({ example: 'update.zip' })
   @IsString()
   @AutoMap()

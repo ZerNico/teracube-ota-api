@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
+import { DeviceEntity } from '@devices/entity/device.entity';
 
 @Entity('update')
 export class UpdateEntity {
@@ -53,6 +56,14 @@ export class UpdateEntity {
     nullable: false,
   })
   type: string;
+
+  @ManyToOne(() => DeviceEntity, (entity: DeviceEntity) => entity.codename)
+  @JoinColumn({ name: 'codename' })
+  device: DeviceEntity;
+
+  @AutoMap()
+  @Column({ type: 'varchar', nullable: false })
+  codename: string;
 
   @AutoMap()
   @CreateDateColumn({ name: 'created_at' })

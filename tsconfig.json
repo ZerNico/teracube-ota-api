@@ -20,7 +20,8 @@
     "paths": {
       "@users/*": ["src/users/*"],
       "@auth/*": ["src/auth/*"],
-      "@updates/*": ["src/updates/*"]
+      "@updates/*": ["src/updates/*"],
+      "@devices/*": ["src/devices/*"]
     },
   }
 }

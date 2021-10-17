@@ -10,6 +10,7 @@ import configuration from './config/configuration';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { UpdatesModule } from './updates/updates.module';
+import { DevicesModule } from './devices/devices.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { UpdatesModule } from './updates/updates.module';
     AuthModule,
     UsersModule,
     UpdatesModule,
+    DevicesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

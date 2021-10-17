@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/types';
 import { UpdateEntity } from '../entity/update.entity';
-import { UpdateDto } from '../dto/update-dto';
+import { UpdateDto } from '../dto/update.dto';
 
 @Injectable()
 export class UpdateMapper extends AutomapperProfile {

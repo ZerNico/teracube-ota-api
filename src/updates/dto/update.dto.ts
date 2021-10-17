@@ -30,6 +30,10 @@ export class UpdateDto {
   @AutoMap()
   type: string;
 
+  @ApiProperty({ example: 'device1' })
+  @AutoMap()
+  codename: string;
+
   @ApiProperty()
   @AutoMap()
   createdAt: Date;
