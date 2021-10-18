@@ -5,7 +5,10 @@ import {
   UseGuards,
   Get,
   Body,
-  UseInterceptors, HttpCode, HttpStatus,
+  UseInterceptors,
+  HttpCode,
+  HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthService } from './auth.service';
@@ -20,10 +23,19 @@ import { RolesGuard } from '@auth/guard/role.guard';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
 import { BadRequestResponse } from '../swagger/bad-request-response.dto';
+import { UpdateDto } from '@updates/dto/update.dto';
+import { UpdateEntity } from '@updates/entity/update.entity';
+import { CreateApiTokenDto } from '@auth/dto/create-api-token.dto';
+import { AccessTokenDto } from '@auth/dto/access-token.dto';
+import { DeviceDto } from '@devices/dto/device.dto';
+import { ApiTokenDto } from '@auth/dto/api-token.dto';
+import { ApiTokenEntity } from '@auth/entity/api-token.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -34,7 +46,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
+  async login(@Request() req): Promise<AccessTokenDto> {
     return this.authService.login(req.user);
   }
 
@@ -58,5 +70,25 @@ export class AuthController {
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post('tokens')
+  async createToken(
+    @Body() createApiTokenDto: CreateApiTokenDto,
+    @Req() req,
+  ): Promise<AccessTokenDto> {
+    return await this.authService.createToken(createApiTokenDto, req.user);
+  }
+
+  @UseInterceptors(
+    MapInterceptor(ApiTokenDto, ApiTokenEntity, { isArray: true }),
+  )
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('tokens')
+  async findAll(@Request() req) {
+    return await this.authService.findAllTokens(req.user);
   }
 }

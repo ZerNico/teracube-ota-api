@@ -17,6 +17,10 @@ export class UsersService {
     });
   }
 
+  async findOneById(id: string): Promise<UserEntity> {
+    return await this.userRepo.findOne(id);
+  }
+
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, password, email } = createUserDto;
 
