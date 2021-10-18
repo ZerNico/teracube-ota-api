@@ -3,7 +3,7 @@ import { UsersService } from '@users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { UserEntity } from '@users/entity/user.entity';
-import { JwtPayload, JwtTypes } from '@auth/dto/jwt-payload.dto';
+import { LoginTokenPayload, JwtTypes } from '@auth/dto/login-token-payload.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ApiTokenEntity } from '@auth/entity/api-token.entity';
@@ -11,6 +11,8 @@ import { CreateApiTokenDto } from '@auth/dto/create-api-token.dto';
 import { AccessTokenDto } from '@auth/dto/access-token.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserDto } from '@users/dto/user.dto';
+import { UpdateEntity } from '@updates/entity/update.entity';
+import { ApiTokenPayload } from '@auth/dto/api-token-payload.dto';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +34,7 @@ export class AuthService {
   }
 
   async login(user: UserEntity): Promise<AccessTokenDto> {
-    const payload: JwtPayload = {
+    const payload: LoginTokenPayload = {
       username: user.username,
       sub: user.id,
       role: user.role,
@@ -57,11 +59,8 @@ export class AuthService {
     const userFromRepo: UserEntity = await this.usersService.findOneById(
       user.id,
     );
-    console.log(userFromRepo);
-    const payload: JwtPayload = {
-      username: userFromRepo.username,
+    const payload: ApiTokenPayload = {
       sub: userFromRepo.id,
-      role: userFromRepo.role,
       type: JwtTypes.ApiToken,
     };
 
@@ -79,6 +78,14 @@ export class AuthService {
     return {
       access_token: accessToken,
     };
+  }
+
+  async findToken(token: string): Promise<ApiTokenEntity> {
+    const tokenFromRepo: ApiTokenEntity = await this.tokenRepo.findOne({
+      where: { token: token },
+    });
+    if (!tokenFromRepo) throw new NotFoundException();
+    return tokenFromRepo;
   }
 
   async findAllTokens(user: UserEntity) {

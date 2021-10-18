@@ -1,12 +1,20 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtPayload } from '@auth/dto/jwt-payload.dto';
+import { LoginTokenPayload, JwtTypes } from '@auth/dto/login-token-payload.dto';
+import { AuthService } from '@auth/auth.service';
+import { UsersService } from '@users/users.service';
+import { UserEntity } from '@users/entity/user.entity';
+import { ApiTokenEntity } from '@auth/entity/api-token.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private authService: AuthService,
+    private userService: UsersService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -15,8 +23,24 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(req, payload: JwtPayload) {
-    console.log(req.headers.authorization.replace('Bearer ', ''));
+  async validate(req, payload: LoginTokenPayload) {
+    if (payload.type === JwtTypes.ApiToken) {
+      const jwt = req.headers.authorization.replace('Bearer ', '');
+      try {
+        const token: ApiTokenEntity = await this.authService.findToken(jwt);
+        const user: UserEntity = await this.userService.findOneById(
+          token.userId,
+        );
+        return {
+          id: user.id,
+          username: user.username,
+          role: user.role,
+          type: payload.type,
+        };
+      } catch (err) {
+        throw new UnauthorizedException();
+      }
+    }
     return {
       id: payload.sub,
       username: payload.username,

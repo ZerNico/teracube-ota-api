@@ -5,7 +5,7 @@ export enum JwtTypes {
   LoginToken = 'loginToken',
 }
 
-export interface JwtPayload {
+export interface LoginTokenPayload {
   username: string;
   sub: string;
   type: JwtTypes;
