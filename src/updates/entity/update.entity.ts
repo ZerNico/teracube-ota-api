@@ -57,7 +57,9 @@ export class UpdateEntity {
   })
   type: string;
 
-  @ManyToOne(() => DeviceEntity, (entity: DeviceEntity) => entity.codename)
+  @ManyToOne(() => DeviceEntity, (entity: DeviceEntity) => entity.codename, {
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'codename' })
   device: DeviceEntity;
 

@@ -5,4 +5,6 @@ export class BadRequestResponse {
   statusCode: number;
   @ApiProperty({ example: 'Bad Request', description: 'Error message' })
   message: string;
+  @ApiProperty({ example: 'Bad Request', description: 'HTTP Error' })
+  error: string;
 }

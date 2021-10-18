@@ -36,6 +36,7 @@ export class UpdatesService {
   }
 
   async update(id: string, updateUpdateDto: UpdateUpdateDto) {
+    await this.updateRepo.findOne(id);
     const result = await this.updateRepo.update(id, { ...updateUpdateDto });
     if (result.affected === 0) throw new NotFoundException();
   }

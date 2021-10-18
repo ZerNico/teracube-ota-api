@@ -5,4 +5,6 @@ export class NotFoundResponse {
   statusCode: number;
   @ApiProperty({ example: 'Not Found', description: 'Error message' })
   message: string;
+  @ApiProperty({ example: 'Not Found', description: 'HTTP Error' })
+  error: string;
 }

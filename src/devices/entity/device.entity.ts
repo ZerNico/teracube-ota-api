@@ -21,7 +21,9 @@ export class DeviceEntity {
   })
   name: string;
 
-  @OneToMany(() => UpdateEntity, (entity: UpdateEntity) => entity.id)
+  @OneToMany(() => UpdateEntity, (entity: UpdateEntity) => entity.id, {
+    cascade: true,
+  })
   updates: UpdateEntity[];
 
   @AutoMap()
