@@ -30,7 +30,9 @@ export class UpdatesService {
   }
 
   async findOne(id: string): Promise<UpdateEntity> {
-    const update: UpdateEntity = await this.updateRepo.findOne(id);
+    const update: UpdateEntity = await this.updateRepo.findOne({
+      where: { id: id },
+    });
     if (!update) throw new NotFoundException();
     return update;
   }

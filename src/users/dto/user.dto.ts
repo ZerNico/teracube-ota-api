@@ -5,6 +5,9 @@ import { ApiProperty } from '@nestjs/swagger';
 export class UserDto {
   @AutoMap()
   @ApiProperty()
+  id: string;
+  @AutoMap()
+  @ApiProperty()
   username: string;
   @AutoMap()
   @ApiProperty()

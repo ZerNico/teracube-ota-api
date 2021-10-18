@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entity/user.entity';
@@ -18,7 +18,11 @@ export class UsersService {
   }
 
   async findOneById(id: string): Promise<UserEntity> {
-    return await this.userRepo.findOne(id);
+    const user: UserEntity = await this.userRepo.findOne({
+      where: { id: id },
+    });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
   }
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {

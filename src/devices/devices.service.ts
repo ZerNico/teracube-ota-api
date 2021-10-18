@@ -27,7 +27,9 @@ export class DevicesService {
   }
 
   async findOne(codename: string): Promise<DeviceEntity> {
-    const device: DeviceEntity = await this.deviceRepo.findOne(codename);
+    const device: DeviceEntity = await this.deviceRepo.findOne({
+      where: { codename: codename },
+    });
     if (!device) throw new NotFoundException('Device not found');
     return device;
   }

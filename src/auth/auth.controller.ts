@@ -8,7 +8,7 @@ import {
   UseInterceptors,
   HttpCode,
   HttpStatus,
-  Req,
+  Req, Param, Delete,
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthService } from './auth.service';
@@ -36,6 +36,7 @@ import { AccessTokenDto } from '@auth/dto/access-token.dto';
 import { DeviceDto } from '@devices/dto/device.dto';
 import { ApiTokenDto } from '@auth/dto/api-token.dto';
 import { ApiTokenEntity } from '@auth/entity/api-token.entity';
+import { RemoveApiTokenParams } from '@auth/params/remove-api-token.params';
 
 @Controller('auth')
 export class AuthController {
@@ -90,5 +91,13 @@ export class AuthController {
   @Get('tokens')
   async findAll(@Request() req) {
     return await this.authService.findAllTokens(req.user);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Delete('tokens/:id')
+  async remove(@Param() params: RemoveApiTokenParams) {
+    return await this.authService.removeToken(params.id);
   }
 }

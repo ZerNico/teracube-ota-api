@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '@users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '@users/dto/create-user.dto';
@@ -10,6 +10,7 @@ import { ApiTokenEntity } from '@auth/entity/api-token.entity';
 import { CreateApiTokenDto } from '@auth/dto/create-api-token.dto';
 import { AccessTokenDto } from '@auth/dto/access-token.dto';
 import { ConfigService } from '@nestjs/config';
+import { UserDto } from '@users/dto/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -51,12 +52,12 @@ export class AuthService {
 
   async createToken(
     createApiTokenDto: CreateApiTokenDto,
-    user: JwtPayload,
+    user: UserDto,
   ): Promise<AccessTokenDto> {
     const userFromRepo: UserEntity = await this.usersService.findOneById(
-      user.sub,
+      user.id,
     );
-    if (!user) throw new UnauthorizedException();
+    console.log(userFromRepo);
     const payload: JwtPayload = {
       username: userFromRepo.username,
       sub: userFromRepo.id,
@@ -80,7 +81,12 @@ export class AuthService {
     };
   }
 
-  async findAllTokens(user: JwtPayload) {
-    return await this.tokenRepo.find();
+  async findAllTokens(user: UserEntity) {
+    return await this.tokenRepo.find({ where: { userId: user.id } });
+  }
+
+  async removeToken(id: string) {
+    const result = await this.tokenRepo.delete(id);
+    if (result.affected === 0) throw new NotFoundException();
   }
 }
