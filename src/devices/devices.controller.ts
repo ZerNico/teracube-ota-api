@@ -7,10 +7,10 @@ import {
   HttpStatus,
   Param,
   Patch,
-  Post, UseInterceptors,
+  Post, UseGuards, UseInterceptors,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
+  ApiBadRequestResponse, ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
@@ -29,6 +29,10 @@ import { BadRequestResponse } from '../swagger/bad-request-response.dto';
 import { NotFoundResponse } from '../swagger/not-found-response.dto';
 import { MapInterceptor } from '@automapper/nestjs';
 import { DeviceEntity } from '@devices/entity/device.entity';
+import { Roles } from '@auth/decorator/roles.decorator';
+import { UserRole } from '@users/entity/user.entity';
+import { JwtAuthGuard } from '@auth/guard/jwt-auth.guard';
+import { RolesGuard } from '@auth/guard/role.guard';
 
 @ApiTags('devices')
 @ApiBadRequestResponse({
@@ -39,6 +43,8 @@ import { DeviceEntity } from '@devices/entity/device.entity';
 export class DevicesController {
   constructor(private readonly devicesService: DevicesService) {}
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(MapInterceptor(DeviceDto, DeviceEntity))
   @Post()
@@ -46,6 +52,7 @@ export class DevicesController {
     description: 'Device created',
     type: DeviceDto,
   })
+  @ApiBearerAuth()
   async create(@Body() createDeviceDto: CreateDeviceDto): Promise<DeviceDto> {
     return await this.devicesService.create(createDeviceDto);
   }
@@ -72,6 +79,8 @@ export class DevicesController {
     return await this.devicesService.findAll();
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Patch(':codename')
   @ApiNoContentResponse({
@@ -82,6 +91,7 @@ export class DevicesController {
     type: NotFoundResponse,
   })
   @ApiParam({ name: 'codename', type: 'string' })
+  @ApiBearerAuth()
   update(
     @Param() params: UpdateDeviceParams,
     @Body() updateDeviceDto: UpdateDeviceDto,
@@ -89,6 +99,8 @@ export class DevicesController {
     return this.devicesService.update(params.codename, updateDeviceDto);
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':codename')
   @ApiNotFoundResponse({
@@ -99,6 +111,7 @@ export class DevicesController {
     description: 'Device deleted',
   })
   @ApiParam({ name: 'codename', type: 'string' })
+  @ApiBearerAuth()
   remove(@Param() params: RemoveDeviceParams) {
     return this.devicesService.remove(params.codename);
   }

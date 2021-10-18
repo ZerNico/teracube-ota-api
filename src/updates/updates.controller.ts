@@ -8,7 +8,7 @@ import {
   Param,
   Patch,
   Post,
-  Query,
+  Query, UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UpdatesService } from './updates.service';
@@ -21,7 +21,7 @@ import { UpdateUpdateDto } from './dto/update-update.dto';
 import { UpdateUpdateParams } from './params/update-update.params';
 import { RemoveUpdateParams } from './params/remove-update.params';
 import {
-  ApiBadRequestResponse,
+  ApiBadRequestResponse, ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
@@ -32,6 +32,10 @@ import {
 } from '@nestjs/swagger';
 import { BadRequestResponse } from '../swagger/bad-request-response.dto';
 import { NotFoundResponse } from '../swagger/not-found-response.dto';
+import { Roles } from '@auth/decorator/roles.decorator';
+import { UserRole } from '@users/entity/user.entity';
+import { JwtAuthGuard } from '@auth/guard/jwt-auth.guard';
+import { RolesGuard } from '@auth/guard/role.guard';
 
 @ApiTags('updates')
 @ApiBadRequestResponse({
@@ -42,6 +46,8 @@ import { NotFoundResponse } from '../swagger/not-found-response.dto';
 export class UpdatesController {
   constructor(private readonly updatesService: UpdatesService) {}
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(MapInterceptor(UpdateDto, UpdateEntity))
   @Post()
@@ -49,6 +55,7 @@ export class UpdatesController {
     description: 'Update created',
     type: UpdateDto,
   })
+  @ApiBearerAuth()
   async create(@Body() createUpdateDto: CreateUpdateDto): Promise<UpdateDto> {
     return await this.updatesService.create(createUpdateDto);
   }
@@ -91,6 +98,8 @@ export class UpdatesController {
     return this.updatesService.findOne(params.id);
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Patch(':id')
   @ApiNoContentResponse({
@@ -101,6 +110,7 @@ export class UpdatesController {
     type: NotFoundResponse,
   })
   @ApiParam({ name: 'id', type: 'string' })
+  @ApiBearerAuth()
   update(
     @Param() params: UpdateUpdateParams,
     @Body() updateUpdateDto: UpdateUpdateDto,
@@ -108,6 +118,8 @@ export class UpdatesController {
     return this.updatesService.update(params.id, updateUpdateDto);
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   @ApiNotFoundResponse({
@@ -118,6 +130,7 @@ export class UpdatesController {
     description: 'Update deleted',
   })
   @ApiParam({ name: 'id', type: 'string' })
+  @ApiBearerAuth()
   remove(@Param() params: RemoveUpdateParams) {
     return this.updatesService.remove(params.id);
   }
