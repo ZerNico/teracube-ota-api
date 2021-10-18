@@ -11,8 +11,7 @@ async function bootstrap() {
     .setTitle('Teracube OTA')
     .setDescription('Teracube OTA API')
     .setVersion('1.0')
-    .addTag('updates')
-    .addTag('devices')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, documentBuilder);
   SwaggerModule.setup('docs', app, document);

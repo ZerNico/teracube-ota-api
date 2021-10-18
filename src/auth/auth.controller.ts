@@ -8,46 +8,62 @@ import {
   UseInterceptors,
   HttpCode,
   HttpStatus,
-  Req, Param, Delete,
+  Req,
+  Param,
+  Delete,
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { UserDto } from '@users/dto/user.dto';
-import { InjectMapper, MapInterceptor } from '@automapper/nestjs';
+import { MapInterceptor } from '@automapper/nestjs';
 import { UserEntity, UserRole } from '@users/entity/user.entity';
-import { Mapper } from '@automapper/types';
 import { Roles } from '@auth/decorator/roles.decorator';
 import { RolesGuard } from '@auth/guard/role.guard';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
-  ApiOperation,
-  ApiQuery,
-  ApiResponse,
+  ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import { BadRequestResponse } from '../swagger/bad-request-response.dto';
-import { UpdateDto } from '@updates/dto/update.dto';
-import { UpdateEntity } from '@updates/entity/update.entity';
 import { CreateApiTokenDto } from '@auth/dto/create-api-token.dto';
 import { AccessTokenDto } from '@auth/dto/access-token.dto';
-import { DeviceDto } from '@devices/dto/device.dto';
 import { ApiTokenDto } from '@auth/dto/api-token.dto';
 import { ApiTokenEntity } from '@auth/entity/api-token.entity';
 import { RemoveApiTokenParams } from '@auth/params/remove-api-token.params';
+import { LoginUserDto } from '@users/dto/login-user.dto';
+import { UnauthorizedResponse } from '../swagger/unauthorized-response.dto';
+import { NotFoundResponse } from '../swagger/not-found-response.dto';
 
+@ApiTags('auth')
 @Controller('auth')
+@ApiBadRequestResponse({
+  description: 'Bad Request',
+  type: BadRequestResponse,
+})
+@ApiBadRequestResponse({
+  description: 'Unauthorized',
+  type: UnauthorizedResponse,
+})
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    @InjectMapper() private mapper: Mapper,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req): Promise<AccessTokenDto> {
+  @ApiOkResponse({
+    description: 'Returns access token',
+    type: AccessTokenDto,
+  })
+  async login(
+    @Body() loginUserDto: LoginUserDto,
+    @Request() req,
+  ): Promise<AccessTokenDto> {
     return this.authService.login(req.user);
   }
 
@@ -55,12 +71,8 @@ export class AuthController {
   @UseInterceptors(MapInterceptor(UserDto, UserEntity))
   @Post('register')
   @ApiCreatedResponse({
-    description: 'The user has been registered.',
+    description: 'User has been registered',
     type: UserDto,
-  })
-  @ApiBadRequestResponse({
-    description: 'User already exists',
-    type: BadRequestResponse,
   })
   async register(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
     return this.authService.register(createUserDto);
@@ -68,14 +80,12 @@ export class AuthController {
 
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
-
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('tokens')
+  @ApiOkResponse({
+    description: 'Returns access token',
+    type: AccessTokenDto,
+  })
+  @ApiBearerAuth()
   async createToken(
     @Body() createApiTokenDto: CreateApiTokenDto,
     @Req() req,
@@ -89,7 +99,13 @@ export class AuthController {
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('tokens')
-  async findAll(@Request() req) {
+  @ApiOkResponse({
+    description: 'Returned api tokens',
+    type: ApiTokenDto,
+    isArray: true,
+  })
+  @ApiBearerAuth()
+  async findAll(@Request() req): Promise<ApiTokenDto[]> {
     return await this.authService.findAllTokens(req.user);
   }
 
@@ -97,6 +113,15 @@ export class AuthController {
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('tokens/:id')
+  @ApiParam({ name: 'id', type: 'string' })
+  @ApiNoContentResponse({
+    description: 'Api token deleted',
+  })
+  @ApiNotFoundResponse({
+    description: 'Not found',
+    type: NotFoundResponse,
+  })
+  @ApiBearerAuth()
   async remove(@Param() params: RemoveApiTokenParams) {
     return await this.authService.removeToken(params.id);
   }

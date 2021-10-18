@@ -66,6 +66,12 @@ export class UpdatesController {
     example: 1613585773,
     required: false,
   })
+  @ApiQuery({
+    name: 'device',
+    description: 'Updates with specific device',
+    example: 'device',
+    required: false,
+  })
   async findAll(@Query() query): Promise<UpdateDto[]> {
     return await this.updatesService.findAll(query);
   }
@@ -77,7 +83,7 @@ export class UpdatesController {
     type: UpdateDto,
   })
   @ApiNotFoundResponse({
-    description: 'Bad Request',
+    description: 'Not found',
     type: NotFoundResponse,
   })
   @ApiParam({ name: 'id', type: 'string' })
@@ -91,7 +97,7 @@ export class UpdatesController {
     description: 'Update patched',
   })
   @ApiNotFoundResponse({
-    description: 'Bad Request',
+    description: 'Not found',
     type: NotFoundResponse,
   })
   @ApiParam({ name: 'id', type: 'string' })
@@ -105,7 +111,7 @@ export class UpdatesController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   @ApiNotFoundResponse({
-    description: 'Bad Request',
+    description: 'Not found',
     type: NotFoundResponse,
   })
   @ApiNoContentResponse({
