@@ -77,8 +77,27 @@ export class UpdateEntity {
   @Column({
     type: 'varchar',
     nullable: false,
+    name: 'staged_id',
   })
   stagedId: string;
+
+  @AutoMap()
+  @Column({
+    type: 'bigint',
+    nullable: false,
+    default: 0,
+    name: 'allowed_count',
+  })
+  allowedCount: number;
+
+  @AutoMap()
+  @Column({
+    type: 'bigint',
+    nullable: false,
+    default: 0,
+    name: 'denied_count',
+  })
+  deniedCount: number;
 
   @AutoMap()
   @Column({ type: 'varchar', nullable: false })

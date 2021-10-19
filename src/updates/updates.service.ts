@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUpdateDto } from './dto/create-update.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UpdateEntity } from './entity/update.entity';
+import { UpdateEntity } from '@updates/entity/update.entity';
 import { UpdateUpdateDto } from './dto/update-update.dto';
 import { QueryBuilder } from 'typeorm-express-query-builder';
 import { buildsProfile } from '@updates/profile/query-builder.profile';
@@ -30,14 +30,32 @@ export class UpdatesService {
     const builder = new QueryBuilder(query, buildsProfile);
     const builtQuery = builder.build();
     const updates: UpdateEntity[] = await this.updateRepo.find(builtQuery);
+    const allowedIds: string[] = [];
+    const deniedIds: string[] = [];
     // Filter returned builds by seeded random number for staged rollout
-    return updates.filter((update: UpdateEntity) => {
-      if (update.percentage === 100) return true;
+    const filteredUpdates = updates.filter((update: UpdateEntity) => {
+      if (update.percentage >= 100) return true;
       if (!identifier || update.percentage === 0) return false;
       const randomId = identifier + update.stagedId;
       const random = new Mulberry32(new Xmur3(randomId).getHash());
-      return random.random() * 100 < update.percentage;
+      const allowed = random.random() * 100 < update.percentage;
+      if (allowed) allowedIds.push(update.id);
+      else deniedIds.push(update.id);
+      return allowed;
     });
+    await this.updateRepo
+      .createQueryBuilder('update')
+      .update(UpdateEntity)
+      .whereInIds(allowedIds)
+      .set({ allowedCount: () => 'allowed_count + 1' })
+      .execute();
+    await this.updateRepo
+      .createQueryBuilder('update')
+      .update(UpdateEntity)
+      .whereInIds(deniedIds)
+      .set({ deniedCount: () => 'denied_count + 1' })
+      .execute();
+    return filteredUpdates;
   }
 
   async findOne(id: string): Promise<UpdateEntity> {

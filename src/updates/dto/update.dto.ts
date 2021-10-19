@@ -1,6 +1,7 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString, Length, Matches } from 'class-validator';
+import { Column } from 'typeorm';
 
 export class UpdateDto {
   @ApiProperty({ example: '25b309d0-d5c1-4305-b74e-64197f4eef06' })
@@ -42,6 +43,14 @@ export class UpdateDto {
   @ApiProperty({ example: '8fa0a420-09d4-4e80-b326-21c6e2bed2e1' })
   @AutoMap()
   stagedId: string;
+
+  @ApiProperty({ example: 7 })
+  @AutoMap()
+  allowedCount: number;
+
+  @ApiProperty({ example: 5 })
+  @AutoMap()
+  deniedCount: number;
 
   @ApiProperty()
   @AutoMap()
