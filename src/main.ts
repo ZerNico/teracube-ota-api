@@ -9,6 +9,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   const config = app.get<ConfigService>(ConfigService);
 
+  app.setGlobalPrefix(config.get('prefix'));
+
   if (config.get('env') !== 'production') {
     const documentBuilder = new DocumentBuilder()
       .setTitle('Teracube OTA')

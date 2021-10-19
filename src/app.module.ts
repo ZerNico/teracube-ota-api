@@ -23,6 +23,7 @@ import { DevicesModule } from './devices/devices.module';
         NODE_ENV: Joi.string()
           .valid('development', 'ci', 'staging', 'production', 'demo')
           .default('production'),
+        PREFIX: Joi.string().default(''),
         PORT: Joi.number().default(3000),
         JWT_SECRET: Joi.string().required(),
         DATABASE_HOST: Joi.string().required(),

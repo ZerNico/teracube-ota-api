@@ -1,6 +1,7 @@
 export default () => ({
   env: process.env.NODE_ENV,
   port: process.env.PORT,
+  prefix: process.env.PREFIX,
   jwt: {
     secret: process.env.JWT_SECRET,
   },
