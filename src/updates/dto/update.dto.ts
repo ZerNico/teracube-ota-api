@@ -1,7 +1,5 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString, Length, Matches } from 'class-validator';
-import { Column } from 'typeorm';
 
 export class UpdateDto {
   @ApiProperty({ example: '25b309d0-d5c1-4305-b74e-64197f4eef06' })

@@ -20,6 +20,9 @@ import { DevicesModule } from './devices/devices.module';
     }),
     ConfigModule.forRoot({
       validationSchema: Joi.object({
+        NODE_ENV: Joi.string()
+          .valid('development', 'ci', 'staging', 'production', 'demo')
+          .default('production'),
         PORT: Joi.number().default(3000),
         JWT_SECRET: Joi.string().required(),
         DATABASE_HOST: Joi.string().required(),
