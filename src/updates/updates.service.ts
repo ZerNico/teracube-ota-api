@@ -7,6 +7,8 @@ import { UpdateUpdateDto } from './dto/update-update.dto';
 import { QueryBuilder } from 'typeorm-express-query-builder';
 import { buildsProfile } from '@updates/profile/query-builder.profile';
 import { DevicesService } from '@devices/devices.service';
+import { Mulberry32, Xmur3 } from '../utils/randUtils';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UpdatesService {
@@ -18,15 +20,24 @@ export class UpdatesService {
 
   async create(createUpdateDto: CreateUpdateDto): Promise<UpdateEntity> {
     await this.devicesService.findOne(createUpdateDto.codename);
+    if (!createUpdateDto.stagedId) createUpdateDto.stagedId = uuidv4();
     return await this.updateRepo.save({
       ...createUpdateDto,
     });
   }
 
-  async findAll(query): Promise<UpdateEntity[]> {
+  async findAll(query, identifier): Promise<UpdateEntity[]> {
     const builder = new QueryBuilder(query, buildsProfile);
     const builtQuery = builder.build();
-    return await this.updateRepo.find(builtQuery);
+    const updates: UpdateEntity[] = await this.updateRepo.find(builtQuery);
+    // Filter returned builds by seeded random number for staged rollout
+    return updates.filter((update: UpdateEntity) => {
+      if (update.percentage === 100) return true;
+      if (!identifier || update.percentage === 0) return false;
+      const randomId = identifier + update.stagedId;
+      const random = new Mulberry32(new Xmur3(randomId).getHash());
+      return random.random() * 100 < update.percentage;
+    });
   }
 
   async findOne(id: string): Promise<UpdateEntity> {

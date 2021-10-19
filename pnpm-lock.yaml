@@ -51,6 +51,7 @@ specifiers:
   typeorm: ^0.2.38
   typeorm-express-query-builder: ^1.5.0
   typescript: ^4.3.5
+  uuid: ^8.3.2
 
 dependencies:
   '@automapper/classes': 6.2.1_4bb65ec57233afe3cfac89733bac292d
@@ -78,6 +79,7 @@ dependencies:
   swagger-ui-express: 4.1.6
   typeorm: 0.2.38_pg@8.7.1
   typeorm-express-query-builder: 1.5.0_typeorm@0.2.38
+  uuid: 8.3.2
 
 devDependencies:
   '@automapper/types': 6.2.1

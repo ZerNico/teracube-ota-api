@@ -8,8 +8,10 @@ import {
   Param,
   Patch,
   Post,
-  Query, UseGuards,
+  Query,
+  UseGuards,
   UseInterceptors,
+  Headers,
 } from '@nestjs/common';
 import { UpdatesService } from './updates.service';
 import { CreateUpdateDto } from './dto/create-update.dto';
@@ -21,8 +23,9 @@ import { UpdateUpdateDto } from './dto/update-update.dto';
 import { UpdateUpdateParams } from './params/update-update.params';
 import { RemoveUpdateParams } from './params/remove-update.params';
 import {
-  ApiBadRequestResponse, ApiBearerAuth,
-  ApiCreatedResponse,
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiCreatedResponse, ApiHeader,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -79,8 +82,14 @@ export class UpdatesController {
     example: 'device',
     required: false,
   })
-  async findAll(@Query() query): Promise<UpdateDto[]> {
-    return await this.updatesService.findAll(query);
+  @ApiHeader({
+    name: 'identifier',
+    description: 'Identifier to differentiate users',
+    example: 'mcieuryl98qweca',
+    required: false,
+  })
+  async findAll(@Headers('identifier') identifier: string, @Query() query): Promise<UpdateDto[]> {
+    return await this.updatesService.findAll(query, identifier);
   }
 
   @UseInterceptors(MapInterceptor(UpdateDto, UpdateEntity))

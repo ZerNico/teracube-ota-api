@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -8,6 +9,7 @@ import {
 } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
 import { DeviceEntity } from '@devices/entity/device.entity';
+import * as bcrypt from 'bcrypt';
 
 @Entity('update')
 export class UpdateEntity {
@@ -63,6 +65,20 @@ export class UpdateEntity {
   })
   @JoinColumn({ name: 'codename' })
   device: DeviceEntity;
+
+  @AutoMap()
+  @Column({
+    type: 'smallint',
+    nullable: false,
+  })
+  percentage: number;
+
+  @AutoMap()
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  stagedId: string;
 
   @AutoMap()
   @Column({ type: 'varchar', nullable: false })
