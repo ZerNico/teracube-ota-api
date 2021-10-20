@@ -77,9 +77,15 @@ export class UpdatesController {
     required: false,
   })
   @ApiQuery({
-    name: 'device',
-    description: 'Updates with specific device',
+    name: 'codename',
+    description: 'Updates with specific device codename',
     example: 'device',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'staging',
+    description: 'Bypass staging on this request',
+    example: 'false',
     required: false,
   })
   @ApiHeader({

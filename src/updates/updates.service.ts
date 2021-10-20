@@ -27,9 +27,13 @@ export class UpdatesService {
   }
 
   async findAll(query, identifier): Promise<UpdateEntity[]> {
-    const builder = new QueryBuilder(query, buildsProfile);
+    const { staging, ...filterQuery } = query;
+    const builder = new QueryBuilder(filterQuery, buildsProfile);
     const builtQuery = builder.build();
     const updates: UpdateEntity[] = await this.updateRepo.find(builtQuery);
+
+    if (staging === 'false') return updates;
+
     const allowedIds: string[] = [];
     const deniedIds: string[] = [];
     // Filter returned builds by seeded random number for staged rollout
