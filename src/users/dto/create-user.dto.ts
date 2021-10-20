@@ -1,4 +1,10 @@
-import { IsEmail, IsString, Length, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString, IsUUID,
+  Length,
+  Matches,
+} from 'class-validator';
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -21,4 +27,10 @@ export class CreateUserDto {
   @IsEmail()
   @ApiProperty()
   email: string;
+  @AutoMap()
+  @Length(1, 256)
+  @IsUUID()
+  @IsOptional()
+  @ApiProperty()
+  invite: string;
 }

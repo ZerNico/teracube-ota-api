@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '@users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '@users/dto/create-user.dto';
@@ -52,6 +52,10 @@ export class AuthService {
   }
 
   async register(createUserDto: CreateUserDto): Promise<UserEntity> {
+    if (this.configService.get('invite')) {
+      const invite = await this.findInvite(createUserDto.invite);
+      await this.removeInvite(invite.id);
+    }
     return this.usersService.create(createUserDto);
   }
 
@@ -102,6 +106,14 @@ export class AuthService {
 
   async createInvite(): Promise<InviteEntity> {
     return await this.inviteRepo.save(new InviteEntity());
+  }
+
+  async findInvite(id: string): Promise<InviteEntity> {
+    const invite: InviteEntity = await this.inviteRepo.findOne({
+      where: { id: id },
+    });
+    if (!invite) throw new NotFoundException('Invite not found');
+    return invite;
   }
 
   async findAllInvites(): Promise<InviteEntity[]> {
