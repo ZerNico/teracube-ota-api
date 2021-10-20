@@ -6,12 +6,14 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategy/local.strategy';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategy/jwt.strategy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { UserMapper } from '@users/profile/user.mapper-profile';
 import { AutomapperModule } from '@automapper/nestjs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiTokenEntity } from '@auth/entity/api-token.entity';
 import { ApiTokenMapper } from '@auth/profile/api-token.mapper-profile';
+import { InviteEntity } from '@auth/entity/invite.entity';
+import { InviteMapper } from '@auth/profile/invite.mapper-profile';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { ApiTokenMapper } from '@auth/profile/api-token.mapper-profile';
     PassportModule,
     ConfigModule,
     AutomapperModule,
-    TypeOrmModule.forFeature([ApiTokenEntity]),
+    TypeOrmModule.forFeature([ApiTokenEntity, InviteEntity]),
     JwtModule.register({}),
   ],
   providers: [
@@ -28,6 +30,7 @@ import { ApiTokenMapper } from '@auth/profile/api-token.mapper-profile';
     JwtStrategy,
     UserMapper,
     ApiTokenMapper,
+    InviteMapper,
   ],
   exports: [AuthService],
   controllers: [AuthController],

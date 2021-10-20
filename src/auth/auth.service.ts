@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserDto } from '@users/dto/user.dto';
 import { UpdateEntity } from '@updates/entity/update.entity';
 import { ApiTokenPayload } from '@auth/dto/api-token-payload.dto';
+import { InviteEntity } from '@auth/entity/invite.entity';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,8 @@ export class AuthService {
     private configService: ConfigService,
     @InjectRepository(ApiTokenEntity)
     private readonly tokenRepo: Repository<ApiTokenEntity>,
+    @InjectRepository(InviteEntity)
+    private readonly inviteRepo: Repository<InviteEntity>,
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
@@ -94,6 +97,19 @@ export class AuthService {
 
   async removeToken(id: string) {
     const result = await this.tokenRepo.delete(id);
+    if (result.affected === 0) throw new NotFoundException();
+  }
+
+  async createInvite(): Promise<InviteEntity> {
+    return await this.inviteRepo.save(new InviteEntity());
+  }
+
+  async findAllInvites(): Promise<InviteEntity[]> {
+    return await this.inviteRepo.find();
+  }
+
+  async removeInvite(id: string) {
+    const result = await this.inviteRepo.delete(id);
     if (result.affected === 0) throw new NotFoundException();
   }
 }

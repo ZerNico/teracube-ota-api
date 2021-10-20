@@ -40,6 +40,9 @@ import { RemoveApiTokenParams } from '@auth/params/remove-api-token.params';
 import { LoginUserDto } from '@users/dto/login-user.dto';
 import { UnauthorizedResponse } from '../swagger/unauthorized-response.dto';
 import { NotFoundResponse } from '../swagger/not-found-response.dto';
+import { InviteDto } from '@auth/dto/invite.dto';
+import { InviteEntity } from '@auth/entity/invite.entity';
+import { RemoveInviteParams } from '@auth/params/remove-invite.params';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -105,7 +108,7 @@ export class AuthController {
     isArray: true,
   })
   @ApiBearerAuth()
-  async findAll(@Request() req): Promise<ApiTokenDto[]> {
+  async findAllTokens(@Request() req): Promise<ApiTokenDto[]> {
     return await this.authService.findAllTokens(req.user);
   }
 
@@ -122,7 +125,51 @@ export class AuthController {
     type: NotFoundResponse,
   })
   @ApiBearerAuth()
-  async remove(@Param() params: RemoveApiTokenParams) {
+  async removeToken(@Param() params: RemoveApiTokenParams) {
+    return await this.authService.removeToken(params.id);
+  }
+
+  @UseInterceptors(MapInterceptor(InviteDto, InviteEntity))
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post('invites')
+  @ApiOkResponse({
+    description: 'Returns invite',
+    type: InviteDto,
+  })
+  @ApiBearerAuth()
+  async createInvite(): Promise<InviteDto> {
+    return await this.authService.createInvite();
+  }
+
+  @UseInterceptors(MapInterceptor(InviteDto, InviteEntity, { isArray: true }))
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('invites')
+  @ApiOkResponse({
+    description: 'Returns Invites',
+    type: InviteDto,
+    isArray: true,
+  })
+  @ApiBearerAuth()
+  async findAllInvites(): Promise<InviteDto[]> {
+    return await this.authService.findAllInvites();
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Delete('invites/:id')
+  @ApiParam({ name: 'id', type: 'string' })
+  @ApiNoContentResponse({
+    description: 'Invite deleted',
+  })
+  @ApiNotFoundResponse({
+    description: 'Not found',
+    type: NotFoundResponse,
+  })
+  @ApiBearerAuth()
+  async removeInvite(@Param() params: RemoveInviteParams) {
     return await this.authService.removeToken(params.id);
   }
 }
