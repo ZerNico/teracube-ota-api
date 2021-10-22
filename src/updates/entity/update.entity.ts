@@ -9,7 +9,7 @@ import {
 import { AutoMap } from '@automapper/classes';
 import { DeviceEntity } from '@devices/entity/device.entity';
 
-@Entity('update')
+@Entity('updates')
 export class UpdateEntity {
   @AutoMap()
   @PrimaryGeneratedColumn('uuid')

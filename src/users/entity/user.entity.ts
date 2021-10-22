@@ -15,7 +15,7 @@ export enum UserRole {
   USER = 'user',
 }
 
-@Entity('user')
+@Entity('users')
 export class UserEntity {
   @AutoMap()
   @PrimaryGeneratedColumn('uuid')

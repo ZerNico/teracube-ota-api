@@ -8,7 +8,7 @@ import {
 import { AutoMap } from '@automapper/classes';
 import { UpdateEntity } from '@updates/entity/update.entity';
 
-@Entity('device')
+@Entity('devices')
 export class DeviceEntity {
   @AutoMap()
   @PrimaryColumn({ nullable: false, unique: true })

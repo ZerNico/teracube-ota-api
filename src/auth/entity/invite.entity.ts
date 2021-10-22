@@ -1,7 +1,7 @@
 import { CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
 
-@Entity('invite')
+@Entity('invites')
 export class InviteEntity {
   @AutoMap()
   @PrimaryGeneratedColumn('uuid')
