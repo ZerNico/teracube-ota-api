@@ -14,5 +14,6 @@ export default () => ({
     database: process.env.DATABASE_DATABASE,
     synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
     ssl: process.env.DATABASE_SSL === 'true',
+    migrationsRun: process.env.DATABASE_MIGRATIONSRUN === 'true',
   },
 });
