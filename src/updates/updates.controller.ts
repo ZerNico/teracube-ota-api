@@ -25,7 +25,8 @@ import { RemoveUpdateParams } from './params/remove-update.params';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiCreatedResponse, ApiHeader,
+  ApiCreatedResponse,
+  ApiHeader,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -59,7 +60,7 @@ export class UpdatesController {
     type: UpdateDto,
   })
   @ApiBearerAuth()
-  async create(@Body() createUpdateDto: CreateUpdateDto): Promise<UpdateDto> {
+  async create(@Body() createUpdateDto: CreateUpdateDto): Promise<UpdateEntity> {
     return await this.updatesService.create(createUpdateDto);
   }
 
@@ -94,7 +95,10 @@ export class UpdatesController {
     example: 'mcieuryl98qweca',
     required: false,
   })
-  async findAll(@Headers('identifier') identifier: string, @Query() query): Promise<UpdateDto[]> {
+  async findAll(
+    @Headers('identifier') identifier: string,
+    @Query() query,
+  ): Promise<UpdateEntity[]> {
     return await this.updatesService.findAll(query, identifier);
   }
 
@@ -109,7 +113,7 @@ export class UpdatesController {
     type: NotFoundResponse,
   })
   @ApiParam({ name: 'id', type: 'string' })
-  findOne(@Param() params: FindOneUpdateParams) {
+  findOne(@Param() params: FindOneUpdateParams): Promise<UpdateEntity> {
     return this.updatesService.findOne(params.id);
   }
 

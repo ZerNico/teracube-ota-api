@@ -1,5 +1,13 @@
 import { AutoMap } from '@automapper/classes';
-import { IsNumber, IsOptional, IsString, IsUrl, Length, Matches, Max, Min } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Length,
+  Max,
+  Min,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUpdateDto {

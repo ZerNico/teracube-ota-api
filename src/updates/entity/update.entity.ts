@@ -1,5 +1,4 @@
 import {
-  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -9,7 +8,6 @@ import {
 } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
 import { DeviceEntity } from '@devices/entity/device.entity';
-import * as bcrypt from 'bcrypt';
 
 @Entity('update')
 export class UpdateEntity {

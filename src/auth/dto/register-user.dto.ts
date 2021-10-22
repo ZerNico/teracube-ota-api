@@ -1,14 +1,15 @@
 import {
   IsEmail,
   IsOptional,
-  IsString, IsUUID,
+  IsString,
+  IsUUID,
   Length,
   Matches,
 } from 'class-validator';
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUserDto {
+export class RegisterUserDto {
   @IsString()
   @Length(1, 32)
   @Matches(/^(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, {

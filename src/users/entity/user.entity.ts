@@ -1,8 +1,13 @@
-import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AutoMap } from '@automapper/classes';
 import { IsEnum } from 'class-validator';
-import { UpdateEntity } from '@updates/entity/update.entity';
 import { ApiTokenEntity } from '@auth/entity/api-token.entity';
 
 export enum UserRole {

@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '@users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from '@users/dto/create-user.dto';
+import { RegisterUserDto } from '@auth/dto/register-user.dto';
 import { UserEntity } from '@users/entity/user.entity';
 import { LoginTokenPayload, JwtTypes } from '@auth/dto/login-token-payload.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,7 +11,6 @@ import { CreateApiTokenDto } from '@auth/dto/create-api-token.dto';
 import { AccessTokenDto } from '@auth/dto/access-token.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserDto } from '@users/dto/user.dto';
-import { UpdateEntity } from '@updates/entity/update.entity';
 import { ApiTokenPayload } from '@auth/dto/api-token-payload.dto';
 import { InviteEntity } from '@auth/entity/invite.entity';
 
@@ -51,7 +50,7 @@ export class AuthService {
     };
   }
 
-  async register(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async register(createUserDto: RegisterUserDto): Promise<UserEntity> {
     if (this.configService.get('invite')) {
       const invite = await this.findInvite(createUserDto.invite);
       await this.removeInvite(invite.id);

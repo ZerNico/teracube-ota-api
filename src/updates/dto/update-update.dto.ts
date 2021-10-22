@@ -5,7 +5,8 @@ import {
   IsString,
   IsUrl,
   Length,
-  Matches, Max, Min,
+  Max,
+  Min,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 

@@ -7,10 +7,13 @@ import {
   HttpStatus,
   Param,
   Patch,
-  Post, UseGuards, UseInterceptors,
+  Post,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse, ApiBearerAuth,
+  ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
@@ -53,7 +56,7 @@ export class DevicesController {
     type: DeviceDto,
   })
   @ApiBearerAuth()
-  async create(@Body() createDeviceDto: CreateDeviceDto): Promise<DeviceDto> {
+  async create(@Body() createDeviceDto: CreateDeviceDto): Promise<DeviceEntity> {
     return await this.devicesService.create(createDeviceDto);
   }
 
@@ -64,7 +67,7 @@ export class DevicesController {
     type: DeviceDto,
   })
   @ApiParam({ name: 'codename', type: 'string' })
-  findOne(@Param() params: FindOneDeviceParams) {
+  findOne(@Param() params: FindOneDeviceParams): Promise<DeviceEntity> {
     return this.devicesService.findOne(params.codename);
   }
 
@@ -75,7 +78,7 @@ export class DevicesController {
     type: DeviceDto,
     isArray: true,
   })
-  async findAll(): Promise<DeviceDto[]> {
+  async findAll(): Promise<DeviceEntity[]> {
     return await this.devicesService.findAll();
   }
 

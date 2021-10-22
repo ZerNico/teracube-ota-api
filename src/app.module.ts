@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from '@auth/auth.module';
+import { UsersModule } from '@users/users.module';
 import configuration from './config/configuration';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
-import { UpdatesModule } from './updates/updates.module';
-import { DevicesModule } from './devices/devices.module';
+import { UpdatesModule } from '@updates/updates.module';
+import { DevicesModule } from '@devices/devices.module';
 
 @Module({
   imports: [

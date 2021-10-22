@@ -15,7 +15,7 @@ import {
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
-import { CreateUserDto } from '@users/dto/create-user.dto';
+import { RegisterUserDto } from '@auth/dto/register-user.dto';
 import { UserDto } from '@users/dto/user.dto';
 import { MapInterceptor } from '@automapper/nestjs';
 import { UserEntity, UserRole } from '@users/entity/user.entity';
@@ -37,7 +37,7 @@ import { AccessTokenDto } from '@auth/dto/access-token.dto';
 import { ApiTokenDto } from '@auth/dto/api-token.dto';
 import { ApiTokenEntity } from '@auth/entity/api-token.entity';
 import { RemoveApiTokenParams } from '@auth/params/remove-api-token.params';
-import { LoginUserDto } from '@users/dto/login-user.dto';
+import { LoginUserDto } from '@auth/dto/login-user.dto';
 import { UnauthorizedResponse } from '../swagger/unauthorized-response.dto';
 import { NotFoundResponse } from '../swagger/not-found-response.dto';
 import { InviteDto } from '@auth/dto/invite.dto';
@@ -77,7 +77,7 @@ export class AuthController {
     description: 'User has been registered',
     type: UserDto,
   })
-  async register(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
+  async register(@Body() createUserDto: RegisterUserDto): Promise<UserDto> {
     return this.authService.register(createUserDto);
   }
 
@@ -108,7 +108,7 @@ export class AuthController {
     isArray: true,
   })
   @ApiBearerAuth()
-  async findAllTokens(@Request() req): Promise<ApiTokenDto[]> {
+  async findAllTokens(@Request() req): Promise<ApiTokenEntity[]> {
     return await this.authService.findAllTokens(req.user);
   }
 
@@ -138,7 +138,7 @@ export class AuthController {
     type: InviteDto,
   })
   @ApiBearerAuth()
-  async createInvite(): Promise<InviteDto> {
+  async createInvite(): Promise<InviteEntity> {
     return await this.authService.createInvite();
   }
 
@@ -152,7 +152,7 @@ export class AuthController {
     isArray: true,
   })
   @ApiBearerAuth()
-  async findAllInvites(): Promise<InviteDto[]> {
+  async findAllInvites(): Promise<InviteEntity[]> {
     return await this.authService.findAllInvites();
   }
 

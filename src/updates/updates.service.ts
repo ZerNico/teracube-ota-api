@@ -7,7 +7,7 @@ import { UpdateUpdateDto } from './dto/update-update.dto';
 import { QueryBuilder } from 'typeorm-express-query-builder';
 import { buildsProfile } from '@updates/profile/query-builder.profile';
 import { DevicesService } from '@devices/devices.service';
-import { Mulberry32, Xmur3 } from '../utils/randUtils';
+import { Mulberry32, Xmur3 } from '../utils/rand.utils';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
