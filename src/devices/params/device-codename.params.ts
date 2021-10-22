@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class BaseDeviceParams {
+export class DeviceCodenameParams {
   @IsString()
   codename: string;
 }

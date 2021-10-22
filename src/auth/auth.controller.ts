@@ -36,13 +36,12 @@ import { CreateApiTokenDto } from '@auth/dto/create-api-token.dto';
 import { AccessTokenDto } from '@auth/dto/access-token.dto';
 import { ApiTokenDto } from '@auth/dto/api-token.dto';
 import { ApiTokenEntity } from '@auth/entity/api-token.entity';
-import { RemoveApiTokenParams } from '@auth/params/remove-api-token.params';
 import { LoginUserDto } from '@auth/dto/login-user.dto';
 import { UnauthorizedResponse } from '../swagger/unauthorized-response.dto';
 import { NotFoundResponse } from '../swagger/not-found-response.dto';
 import { InviteDto } from '@auth/dto/invite.dto';
 import { InviteEntity } from '@auth/entity/invite.entity';
-import { RemoveInviteParams } from '@auth/params/remove-invite.params';
+import { ApiTokenIdParams } from '@auth/params/api-token-id.params';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -125,7 +124,7 @@ export class AuthController {
     type: NotFoundResponse,
   })
   @ApiBearerAuth()
-  async removeToken(@Param() params: RemoveApiTokenParams) {
+  async removeToken(@Param() params: ApiTokenIdParams) {
     return await this.authService.removeToken(params.id);
   }
 
@@ -169,7 +168,7 @@ export class AuthController {
     type: NotFoundResponse,
   })
   @ApiBearerAuth()
-  async removeInvite(@Param() params: RemoveInviteParams) {
+  async removeInvite(@Param() params: ApiTokenIdParams) {
     return await this.authService.removeToken(params.id);
   }
 }

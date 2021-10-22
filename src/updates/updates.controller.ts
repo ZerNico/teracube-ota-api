@@ -18,10 +18,7 @@ import { CreateUpdateDto } from './dto/create-update.dto';
 import { MapInterceptor } from '@automapper/nestjs';
 import { UpdateEntity } from './entity/update.entity';
 import { UpdateDto } from './dto/update.dto';
-import { FindOneUpdateParams } from './params/find-one-update.params';
 import { UpdateUpdateDto } from './dto/update-update.dto';
-import { UpdateUpdateParams } from './params/update-update.params';
-import { RemoveUpdateParams } from './params/remove-update.params';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -40,6 +37,7 @@ import { Roles } from '@auth/decorator/roles.decorator';
 import { UserRole } from '@users/entity/user.entity';
 import { JwtAuthGuard } from '@auth/guard/jwt-auth.guard';
 import { RolesGuard } from '@auth/guard/role.guard';
+import { UpdateIdParams } from '@updates/params/update-id.params';
 
 @ApiTags('updates')
 @ApiBadRequestResponse({
@@ -60,7 +58,9 @@ export class UpdatesController {
     type: UpdateDto,
   })
   @ApiBearerAuth()
-  async create(@Body() createUpdateDto: CreateUpdateDto): Promise<UpdateEntity> {
+  async create(
+    @Body() createUpdateDto: CreateUpdateDto,
+  ): Promise<UpdateEntity> {
     return await this.updatesService.create(createUpdateDto);
   }
 
@@ -113,7 +113,7 @@ export class UpdatesController {
     type: NotFoundResponse,
   })
   @ApiParam({ name: 'id', type: 'string' })
-  findOne(@Param() params: FindOneUpdateParams): Promise<UpdateEntity> {
+  findOne(@Param() params: UpdateIdParams): Promise<UpdateEntity> {
     return this.updatesService.findOne(params.id);
   }
 
@@ -131,7 +131,7 @@ export class UpdatesController {
   @ApiParam({ name: 'id', type: 'string' })
   @ApiBearerAuth()
   update(
-    @Param() params: UpdateUpdateParams,
+    @Param() params: UpdateIdParams,
     @Body() updateUpdateDto: UpdateUpdateDto,
   ) {
     return this.updatesService.update(params.id, updateUpdateDto);
@@ -150,7 +150,7 @@ export class UpdatesController {
   })
   @ApiParam({ name: 'id', type: 'string' })
   @ApiBearerAuth()
-  remove(@Param() params: RemoveUpdateParams) {
+  remove(@Param() params: UpdateIdParams) {
     return this.updatesService.remove(params.id);
   }
 }

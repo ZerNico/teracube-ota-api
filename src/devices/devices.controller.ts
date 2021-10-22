@@ -25,9 +25,6 @@ import { DevicesService } from '@devices/devices.service';
 import { DeviceDto } from '@devices/dto/device.dto';
 import { CreateDeviceDto } from '@devices/dto/create-device.dto';
 import { UpdateDeviceDto } from '@devices/dto/update-device.dto';
-import { UpdateDeviceParams } from '@devices/params/update-device.params';
-import { RemoveDeviceParams } from '@devices/params/remove-device.params';
-import { FindOneDeviceParams } from '@devices/params/find-one-device.params';
 import { BadRequestResponse } from '../swagger/bad-request-response.dto';
 import { NotFoundResponse } from '../swagger/not-found-response.dto';
 import { MapInterceptor } from '@automapper/nestjs';
@@ -36,6 +33,7 @@ import { Roles } from '@auth/decorator/roles.decorator';
 import { UserRole } from '@users/entity/user.entity';
 import { JwtAuthGuard } from '@auth/guard/jwt-auth.guard';
 import { RolesGuard } from '@auth/guard/role.guard';
+import { DeviceCodenameParams } from '@devices/params/device-codename.params';
 
 @ApiTags('devices')
 @ApiBadRequestResponse({
@@ -69,7 +67,7 @@ export class DevicesController {
     type: DeviceDto,
   })
   @ApiParam({ name: 'codename', type: 'string' })
-  findOne(@Param() params: FindOneDeviceParams): Promise<DeviceEntity> {
+  findOne(@Param() params: DeviceCodenameParams): Promise<DeviceEntity> {
     return this.devicesService.findOne(params.codename);
   }
 
@@ -98,7 +96,7 @@ export class DevicesController {
   @ApiParam({ name: 'codename', type: 'string' })
   @ApiBearerAuth()
   update(
-    @Param() params: UpdateDeviceParams,
+    @Param() params: DeviceCodenameParams,
     @Body() updateDeviceDto: UpdateDeviceDto,
   ) {
     return this.devicesService.update(params.codename, updateDeviceDto);
@@ -117,7 +115,7 @@ export class DevicesController {
   })
   @ApiParam({ name: 'codename', type: 'string' })
   @ApiBearerAuth()
-  remove(@Param() params: RemoveDeviceParams) {
+  remove(@Param() params: DeviceCodenameParams) {
     return this.devicesService.remove(params.codename);
   }
 }

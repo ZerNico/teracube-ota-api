@@ -1,6 +1,6 @@
 import { IsUUID } from 'class-validator';
 
-export class BaseApiTokenParams {
+export class UserIdParams {
   @IsUUID()
   id: string;
 }

@@ -27,7 +27,7 @@ import { RolesGuard } from '@auth/guard/role.guard';
 import { MapInterceptor } from '@automapper/nestjs';
 import { NotFoundResponse } from '../swagger/not-found-response.dto';
 import { UsersService } from '@users/users.service';
-import { UsersIdParams } from '@users/params/users-id.params';
+import { UserIdParams } from '@users/params/user-id.params';
 import { UserDto } from '@users/dto/user.dto';
 import { UpdateUserDto } from '@users/dto/update-user.dto';
 
@@ -50,7 +50,7 @@ export class UsersController {
   })
   @ApiParam({ name: 'id', type: 'string' })
   @ApiBearerAuth()
-  findOne(@Param() params: UsersIdParams): Promise<UserEntity> {
+  findOne(@Param() params: UserIdParams): Promise<UserEntity> {
     return this.usersService.findOneById(params.id);
   }
 
@@ -81,7 +81,7 @@ export class UsersController {
   })
   @ApiParam({ name: 'id', type: 'string' })
   @ApiBearerAuth()
-  update(@Param() params: UsersIdParams, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param() params: UserIdParams, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(params.id, updateUserDto);
   }
 
@@ -98,7 +98,7 @@ export class UsersController {
   })
   @ApiParam({ name: 'id', type: 'string' })
   @ApiBearerAuth()
-  remove(@Param() params: UsersIdParams) {
+  remove(@Param() params: UserIdParams) {
     return this.usersService.remove(params.id);
   }
 }
