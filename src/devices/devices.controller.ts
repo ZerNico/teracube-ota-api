@@ -56,7 +56,9 @@ export class DevicesController {
     type: DeviceDto,
   })
   @ApiBearerAuth()
-  async create(@Body() createDeviceDto: CreateDeviceDto): Promise<DeviceEntity> {
+  async create(
+    @Body() createDeviceDto: CreateDeviceDto,
+  ): Promise<DeviceEntity> {
     return await this.devicesService.create(createDeviceDto);
   }
 

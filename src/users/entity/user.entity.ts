@@ -1,6 +1,6 @@
 import {
   BeforeInsert,
-  Column,
+  Column, CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -55,6 +55,14 @@ export class UserEntity {
     cascade: true,
   })
   apiTokens: ApiTokenEntity[];
+
+  @AutoMap()
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @AutoMap()
+  @CreateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   @BeforeInsert() async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);

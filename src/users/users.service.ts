@@ -8,6 +8,7 @@ import { RegisterUserDto } from '@auth/dto/register-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entity/user.entity';
 import { Repository } from 'typeorm';
+import { UpdateUserDto } from '@users/dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -46,5 +47,22 @@ export class UsersService {
     });
     await this.userRepo.save(user);
     return user;
+  }
+
+  async findAll(): Promise<UserEntity[]> {
+    return await this.userRepo.find();
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    await this.findOneById(id);
+    const result = await this.userRepo.update(id, {
+      ...updateUserDto,
+    });
+    if (result.affected === 0) throw new NotFoundException();
+  }
+
+  async remove(id: string) {
+    const result = await this.userRepo.delete(id);
+    if (result.affected === 0) throw new NotFoundException();
   }
 }
