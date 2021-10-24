@@ -9,9 +9,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   const config = app.get<ConfigService>(ConfigService);
 
-  app.setGlobalPrefix(config.get('prefix'));
+  app.setGlobalPrefix(config.get('app.prefix'));
 
-  if (config.get('env') !== 'production') {
+  if (config.get('app.env') !== 'production') {
     const documentBuilder = new DocumentBuilder()
       .setTitle('Teracube OTA')
       .setDescription('Teracube OTA API')
@@ -22,7 +22,7 @@ async function bootstrap() {
     SwaggerModule.setup('docs', app, document);
   }
 
-  const port = config.get('port');
+  const port = config.get('app.port');
   await app.listen(port);
   Logger.log(`App running on port: ${port}`, 'Bootstrap');
 }

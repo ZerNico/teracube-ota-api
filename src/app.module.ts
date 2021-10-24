@@ -6,11 +6,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from '@auth/auth.module';
 import { UsersModule } from '@users/users.module';
-import configuration from './config/configuration';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { UpdatesModule } from '@updates/updates.module';
 import { DevicesModule } from '@devices/devices.module';
+import dbConfig from './config/db.config';
+import appConfig from './config/app.config';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { DevicesModule } from '@devices/devices.module';
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
           .valid('development', 'ci', 'staging', 'production', 'demo')
-          .default('production'),
+          .default('development'),
         INVITE: Joi.boolean().default(true),
         PREFIX: Joi.string().default(''),
         PORT: Joi.number().default(3000),
@@ -36,25 +37,12 @@ import { DevicesModule } from '@devices/devices.module';
         DATABASE_SYNCHRONIZE: Joi.boolean().default(false),
         DATABASE_MIGRATIONSRUN: Joi.boolean().default(true),
       }),
-      load: [configuration],
+      load: [dbConfig, appConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('database.host'),
-        port: configService.get<number>('database.port'),
-        username: configService.get('database.username'),
-        password: configService.get('database.password'),
-        database: configService.get('database.database'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        migrations: [__dirname + '/migrations/*{.ts,.js}'],
-        migrationsTableName: 'migrations_typeorm',
-        extra: {
-          ssl: false,
-        },
-        migrationsRun: configService.get('database.migrationsRun'),
-        synchronize: configService.get('database.synchronize'),
+      useFactory: async (configService: ConfigService) => ({
+        ...configService.get('database'),
       }),
       inject: [ConfigService],
     }),

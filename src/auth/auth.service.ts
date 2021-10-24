@@ -44,7 +44,7 @@ export class AuthService {
     };
     return {
       access_token: this.jwtService.sign(payload, {
-        secret: this.configService.get('jwt.secret'),
+        secret: this.configService.get('app.jwt.secret'),
         expiresIn: '60m',
       }),
     };
@@ -71,7 +71,7 @@ export class AuthService {
     };
 
     const accessToken = this.jwtService.sign(payload, {
-      secret: this.configService.get('jwt.secret'),
+      secret: this.configService.get('app.jwt.secret'),
       expiresIn: '10y',
     });
 
